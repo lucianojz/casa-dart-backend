@@ -1,23 +1,27 @@
 import { Router } from 'express';
-import { v4 as uuid } from 'uuid';
-// import
+import PedidosRepository from '../repositories/PedidosRepository';
+import CreatePedidoService from '../services/CreatePedidoService';
 
 const pedidosRouter = Router();
-
-const pedidos = [];
+const pedidosRepository = new PedidosRepository();
 
 pedidosRouter.post('/', (request, response) => {
-  const { cliente, produto } = request.body;
+  try {
+    const { cliente, produto } = request.body;
+    const createPedido = new CreatePedidoService(pedidosRepository);
 
-  const pedido = {
-    id: uuid(),
-    data_emissao: new Date(),
-    cliente,
-    produto,
-  };
+    const pedido = createPedido.execute({ cliente, produto });
 
-  pedidos.push(pedido);
-  return response.json(pedido);
+    return response.json(pedido);
+  } catch (err) {
+    return response.status(400).json({ error: err.message });
+  }
+});
+
+pedidosRouter.get('/', (request, response) => {
+  const pedidos = pedidosRepository.all();
+
+  return response.json(pedidos);
 });
 
 export default pedidosRouter;
