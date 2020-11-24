@@ -1,8 +1,10 @@
 import { Router } from 'express';
-import pedidosRouter from './pedidos.router';
+import ordersRouter from './orders.router';
+import customersRouter from './customers.router';
 
 const routes = Router();
 
-routes.use('/pedidos', pedidosRouter);
+routes.use('/orders', ordersRouter);
+routes.use('/customers', customersRouter);
 
 export default routes;
