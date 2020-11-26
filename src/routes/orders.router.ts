@@ -21,11 +21,16 @@ ordersRouter.get('/', async (request, response) => {
 
 ordersRouter.post('/', async (request, response) => {
   const { id: customer_id } = request.customer;
+
+  const { products } = request.body;
   const createOrder = new CreateOrderService();
 
-  const order = await createOrder.execute({ customer_id });
+  const { order, orderProducts } = await createOrder.execute({
+    customer_id,
+    products,
+  });
 
-  return response.json(order);
+  return response.json({ order, orderProducts });
 });
 
 export default ordersRouter;
