@@ -8,10 +8,10 @@ const ordersRouter = Router();
 
 ordersRouter.post('/', async (request, response) => {
   try {
-    const { customer } = request.body;
+    const { customer_id } = request.body;
     const createOrder = new CreateOrderService();
 
-    const order = await createOrder.execute({ customer });
+    const order = await createOrder.execute({ customer_id });
 
     return response.json(order);
   } catch (err) {
