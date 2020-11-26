@@ -4,11 +4,24 @@ import { getCustomRepository } from 'typeorm';
 import OrdersRepository from '../repositories/OrdersRepository';
 import CreateOrderService from '../services/CreateOrderService';
 
+import ensureCustomerAuthenticated from '../middlewares/ensureCustomerAuthenticated';
+
 const ordersRouter = Router();
+
+ordersRouter.use(ensureCustomerAuthenticated);
+
+ordersRouter.get('/', async (request, response) => {
+  const { id: customer_id } = request.customer;
+
+  const ordersRepository = getCustomRepository(OrdersRepository);
+  const orders = await ordersRepository.find({ where: { customer_id } });
+
+  return response.json(orders);
+});
 
 ordersRouter.post('/', async (request, response) => {
   try {
-    const { customer_id } = request.body;
+    const { id: customer_id } = request.customer;
     const createOrder = new CreateOrderService();
 
     const order = await createOrder.execute({ customer_id });
@@ -17,13 +30,6 @@ ordersRouter.post('/', async (request, response) => {
   } catch (err) {
     return response.status(400).json({ error: err.message });
   }
-});
-
-ordersRouter.get('/', async (request, response) => {
-  const ordersRepository = getCustomRepository(OrdersRepository);
-  const orders = await ordersRepository.find();
-
-  return response.json(orders);
 });
 
 export default ordersRouter;
