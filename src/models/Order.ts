@@ -4,7 +4,11 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToOne,
+  JoinColumn,
 } from 'typeorm';
+
+import Customer from './Customer';
 
 @Entity('orders')
 class Order {
@@ -12,7 +16,11 @@ class Order {
   id: string;
 
   @Column()
-  customer: string;
+  customer_id: string;
+
+  @ManyToOne(() => Customer)
+  @JoinColumn({ name: 'customer_id' })
+  customer: Customer;
 
   @Column('time with time zone', { nullable: true })
   payment_date: Date | null;
