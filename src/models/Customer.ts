@@ -24,6 +24,9 @@ class Customer {
   phone: string;
 
   @Column()
+  email: string;
+
+  @Column()
   password: string;
 
   @Column()
