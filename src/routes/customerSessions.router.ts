@@ -5,19 +5,15 @@ import CreateCustomerSessionService from '../services/CreateCustomerSessionServi
 const customerSessionsRouter = Router();
 
 customerSessionsRouter.get('/', async (request, response) => {
-  try {
-    const { email, password } = request.body;
-    const customerSession = new CreateCustomerSessionService();
+  const { email, password } = request.body;
+  const customerSession = new CreateCustomerSessionService();
 
-    const { customer, token } = await customerSession.execute({
-      email,
-      password,
-    });
+  const { customer, token } = await customerSession.execute({
+    email,
+    password,
+  });
 
-    return response.json({ customer, token });
-  } catch (err) {
-    return response.status(400).json({ error: err.message });
-  }
+  return response.json({ customer, token });
 });
 
 export default customerSessionsRouter;
