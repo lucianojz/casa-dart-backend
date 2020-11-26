@@ -1,42 +1,44 @@
 import { Router } from 'express';
-import { getRepository } from 'typeorm';
-
-import Customer from '../models/Customer';
+import CreateCustomerService from '../services/CreateCustomerService';
 
 const customersRouter = Router();
 
 customersRouter.post('/', async (request, response) => {
-  const {
-    full_name,
-    document,
-    birth_date,
-    phone,
-    password,
-    city,
-    state,
-    address,
-    address_complement,
-    postal_code,
-  } = request.body;
+  try {
+    const {
+      full_name,
+      document,
+      birth_date,
+      phone,
+      email,
+      password,
+      city,
+      state,
+      address,
+      address_complement,
+      postal_code,
+    } = request.body;
 
-  const customerRepository = getRepository(Customer);
+    const createCustomer = new CreateCustomerService();
 
-  const customer = customerRepository.create({
-    full_name,
-    document,
-    birth_date,
-    phone,
-    password,
-    city,
-    state,
-    address,
-    address_complement,
-    postal_code,
-  });
+    const customer = await createCustomer.execute({
+      full_name,
+      document,
+      birth_date,
+      phone,
+      email,
+      password,
+      city,
+      state,
+      address,
+      address_complement,
+      postal_code,
+    });
 
-  await customerRepository.save(customer);
-
-  return response.json(customer);
+    return response.json(customer);
+  } catch (err) {
+    return response.status(400).json({ error: err.message });
+  }
 });
 
 export default customersRouter;
