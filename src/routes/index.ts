@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import ordersRouter from './orders.router';
-import productsRouter from './products.router';
-import customersRouter from './customers.router';
-import customerSessionsRouter from './customerSessions.router';
+import ordersRouter from './orders.routes';
+import productsRouter from './products.routes';
+import customersRouter from './customers.routes';
+import customerSessionsRouter from './customerSessions.routes';
 
 const routes = Router();
 
