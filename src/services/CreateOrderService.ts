@@ -6,7 +6,7 @@ import OrderProduct from '../models/OrderProduct';
 
 interface OrderProductRequest {
   product_id: string;
-  quantity: number;
+  amount: number;
   value: number;
   freight_charge: number;
 }
@@ -33,22 +33,24 @@ class CreateOrderService {
 
     const { id: order_id } = order;
 
-    await products.map(
-      async (product): Promise<void> => {
-        const { product_id, freight_charge, quantity, value } = product;
-        const orderProductInserted = orderProductsRepo.create({
-          order_id,
-          product_id,
-          freight_charge,
-          quantity,
-          value,
-        });
-        await orderProductsRepo.save(orderProductInserted);
+    await Promise.all(
+      products.map(
+        async (product): Promise<void> => {
+          const { product_id, freight_charge, amount, value } = product;
+          const orderProductInserted = orderProductsRepo.create({
+            order_id,
+            product_id,
+            freight_charge,
+            amount,
+            value,
+          });
+          await orderProductsRepo.save(orderProductInserted);
 
-        console.log(orderProductInserted);
+          console.log(orderProductInserted);
 
-        orderProducts.push(orderProductInserted);
-      },
+          orderProducts.push(orderProductInserted);
+        },
+      ),
     );
 
     return { order, orderProducts };

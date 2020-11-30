@@ -4,7 +4,7 @@ import CreateCustomerSessionService from '../services/CreateCustomerSessionServi
 
 const customerSessionsRouter = Router();
 
-customerSessionsRouter.get('/', async (request, response) => {
+customerSessionsRouter.post('/', async (request, response) => {
   const { email, password } = request.body;
   const customerSession = new CreateCustomerSessionService();
 

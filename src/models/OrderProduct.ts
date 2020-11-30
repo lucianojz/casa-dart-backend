@@ -19,7 +19,7 @@ class OrderProduct {
   product: Promise<Product>;
 
   @Column('numeric')
-  quantity: number;
+  amount: number;
 
   @Column('numeric')
   value: number;
